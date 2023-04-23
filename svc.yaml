@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+    - name: https
+      port: 443
+      targetPort: 3000
+    - name: http-back
+      port: 8080
+      targetPort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-back
+spec:
+  selector:
+    app: web-back
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-front
+spec:
+  selector:
+    app: web-front
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  type: ExternalName
+  externalName: db.cv0mjqsao6wx.ap-northeast-2.rds.amazonaws.com
+  ports:
+    - name: mysql
+      port: 3306
